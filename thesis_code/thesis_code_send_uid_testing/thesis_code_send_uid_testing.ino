@@ -8,7 +8,7 @@
 
 const char* ssid = "Hashira09";         
 const char* password = "12345678"; 
-const char* serverUrl = "https://4908-112-204-168-184.ngrok-free.app/rfid_data";
+const char* serverUrl = "https://9a57-112-204-168-184.ngrok-free.app/rfid_data";
 
 MFRC522 rfid(SS_PIN, RST_PIN);
 
@@ -27,7 +27,7 @@ void setup() {
   Serial.println("\nConnected to Wi-Fi!");
 }
 
-void loop()
+void loop(){
   if (!rfid.PICC_IsNewCardPresent() || !rfid.PICC_ReadCardSerial())
     return;
 
@@ -44,6 +44,7 @@ void loop()
 
     http.begin(serverUrl);
     http.addHeader("Content-Type", "application/json");
+    http.addHeader("Authorization", "6dbe948bb56f1d6827fbbd8321c7ad14");
 
     String payload = String("{\"uid\":\"") + uid + String("\"}");
 
