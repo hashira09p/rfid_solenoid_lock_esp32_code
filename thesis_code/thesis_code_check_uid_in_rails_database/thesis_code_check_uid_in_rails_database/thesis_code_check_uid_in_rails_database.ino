@@ -9,7 +9,7 @@
 
 const char* ssid = "Hashira09";         
 const char* password = "12345678"; 
-const char* serverUrl = "https://<YOUR_SERVER_IP>:3000/api/v1/rfid_data";
+const char* serverUrl = "https://20eb-112-204-168-184.ngrok-free.app/rfids";
 
 MFRC522 rfid(SS_PIN, RST_PIN);
 
@@ -45,8 +45,10 @@ void loop() {
     HTTPClient http;
     http.begin(serverUrl);
     http.addHeader("Content-Type", "application/json");
+    http.addHeader("Authorization", "6dbe948bb56f1d6827fbbd8321c7ad14");
 
-    String payload = String("{\"uid\":\"") + uid + String("\"}");
+    String payload = String("{\"uid\":\"") + uid + String("\",\"room_number\":\"") + 201 + String("\"}");
+
     int httpResponseCode = http.POST(payload);
     Serial.println("Payload sent: " + payload);
 
@@ -56,11 +58,15 @@ void loop() {
       Serial.println("Server Response: " + response);
 
       
-      if (response.indexOf("\"unlock\":true") != -1) {
+      if (response.indexOf("\"unlock\":true") != -1 && digitalRead(RELAY_PIN) == LOW) {
         Serial.println("Access granted! Unlocking solenoid...");
         digitalWrite(RELAY_PIN, HIGH); 
-        delay(5000);                  
-        digitalWrite(RELAY_PIN, LOW); 
+
+      } else if(digitalRead(RELAY_PIN) == HIGH){
+        delay(1000);                  
+        digitalWrite(RELAY_PIN, LOW);
+        Serial.println("Access granted! Locking solenoid...");
+
       } else {
         Serial.println("Access denied!");
       }
