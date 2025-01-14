@@ -7,15 +7,18 @@
 #define SS_PIN 5
 #define RELAY_PIN 27
 
+String room_status = "Lock";
+
 const char* ssid = "Hashira09";         
 const char* password = "12345678"; 
-const char* serverUrl = "https://d1a0-112-204-168-184.ngrok-free.app/rfids";
+const char* serverUrl = "https://2b40-112-204-168-184.ngrok-free.app/rfids";
 
 MFRC522 rfid(SS_PIN, RST_PIN);
 
 void setup() {
   Serial.begin(115200);
   SPI.begin();
+  
   rfid.PCD_Init();
   pinMode(RELAY_PIN, OUTPUT);
   digitalWrite(RELAY_PIN, LOW); 
@@ -47,8 +50,6 @@ void loop() {
     http.addHeader("Content-Type", "application/json");
     http.addHeader("Authorization", "6dbe948bb56f1d6827fbbd8321c7ad14");
 
-    String room_status = "Lock";
-
     String payload = String("{\"uid\":\"") + uid + String("\",\"room_number\":\"") + 201 + 
                      String("\",\"room_status\":\"") + room_status + String("\"}");
 
@@ -64,6 +65,7 @@ void loop() {
       
       if (response.indexOf("\"unlock\":true") != -1 && digitalRead(RELAY_PIN) == LOW) {
         room_status = "Unlock";
+        delay(1000);  
         Serial.println("Access granted! Unlocking solenoid...");
         digitalWrite(RELAY_PIN, HIGH); 
 
@@ -82,7 +84,6 @@ void loop() {
     http.end();
   }
 
-  
   rfid.PICC_HaltA();
 
   delay(2000); 
