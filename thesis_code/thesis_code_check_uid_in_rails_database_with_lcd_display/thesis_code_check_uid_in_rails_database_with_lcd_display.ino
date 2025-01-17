@@ -18,14 +18,13 @@ const char* serverUrl = "https://95bf-112-204-162-196.ngrok-free.app/rfids";
 
 MFRC522 rfid(SS_PIN, RST_PIN);
 
-// Initialize LCD
 hd44780_I2Cexp lcd;
 
 void setup() {
   Serial.begin(115200);
   SPI.begin();
-  
   rfid.PCD_Init();
+
   pinMode(RELAY_PIN, OUTPUT);
   digitalWrite(RELAY_PIN, LOW);
 
@@ -37,8 +36,7 @@ void setup() {
   lcd.print("Initialized!");
   delay(2000);
   lcd.clear();
-
-  // Connect to Wi-Fi
+  
   WiFi.begin(ssid, password);
   lcd.print("Connecting to");
   lcd.setCursor(0, 1);
@@ -52,6 +50,7 @@ void setup() {
   lcd.print("Wi-Fi Connected");
   Serial.println("\nConnected to Wi-Fi!");
   delay(2000);
+  
   lcd.clear();
   lcd.print("Please scan");
   lcd.setCursor(0, 1);
