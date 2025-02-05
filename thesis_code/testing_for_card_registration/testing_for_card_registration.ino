@@ -15,8 +15,8 @@ String room_status = "Lock";
 
 const char* ssid = "Hashira09";
 const char* password = "12345678";
-const char* accessUrl = "https://b7e3-112-204-162-196.ngrok-free.app/rfids";
-const char* registerUrl = "https://b7e3-112-204-162-196.ngrok-free.app/cards";
+const char* accessUrl = "https://3162-112-204-167-2.ngrok-free.app/rfids";
+const char* registerUrl = "https://3162-112-204-167-2.ngrok-free.app/card_scan";
 
 MFRC522 rfid(SS_PIN, RST_PIN);
 
